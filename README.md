@@ -57,6 +57,6 @@ The input syntax of PolyHorn follows the SMTLIB syntax:
 
 The default value is 0 for all integer parameters and `false` for all boolean parameters. 
 
-See `example.json` as an example. 
+See `config-example.json` as an example. 
 
  [1] Polynomial Reachability Witnesses via Stellensätze. Asadi et. al. PLDI 2021.
