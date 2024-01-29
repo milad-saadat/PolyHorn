@@ -47,7 +47,6 @@ The input syntax of PolyHorn follows the SMTLIB syntax:
  The config file must be in `.json` format containing the following fields:
  - `theorem_name` which is one of `"farkas"`, `"handelman"` or `"putinar"`.
  - `solver_name` which is one of `"z3"` or `"mathsat"`.
- - `solver_path` which should be the path to the chosen solver. 
  - `output_path` which should be the path to a file where PolyHorn will store the obtained polynomial system. 
  - (optional) `int_value` which is assigned `false` or `true`. When `true`, PolyHorn tries to find integer values for unknown variables. 
  - In case `handelman` is chosen for `theorem_name`, an additional integer parameter `degree_of_sat` should be specified. This is the only parameter required by Handelman's Positivestellensatz. See [1] appendix E for more details.
