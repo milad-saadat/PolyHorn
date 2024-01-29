@@ -48,7 +48,7 @@ The input syntax of PolyHorn follows the SMTLIB syntax:
  - `theorem_name` which is one of `"farkas"`, `"handelman"` or `"putinar"`.
  - `solver_name` which is one of `"z3"` or `"mathsat"`.
  - `solver_path` which should be the path to the chosen solver. 
- - `temp_path` which should be the path to a file where PolyHorn will store the obtained polynomial system. 
+ - `output_path` which should be the path to a file where PolyHorn will store the obtained polynomial system. 
  - (optional) `int_value` which is assigned `false` or `true`. When `true`, PolyHorn tries to find integer values for unknown variables. 
  - In case `handelman` is chosen for `theorem_name`, an additional integer parameter `degree_of_sat` should be specified. This is the only parameter required by Handelman's Positivestellensatz. See [1] appendix E for more details.
  - In case `putinar` is chosen for `theorem_name`, four parameters should be specified in the config file: (i) `degree_of_sat` the degree of SOS polynomials considered when the LHS of pCHCs are assumed satisfying, (ii) `degree_of_nonstrict_unsat`, (iii) `degree_of_strict_unsat` and (iv) `max_d_of_strict`, for the remaining three degree parameters of Putinar's positivestellensatz. The names are self-explanatory and the details can be found in [1] section 3.
