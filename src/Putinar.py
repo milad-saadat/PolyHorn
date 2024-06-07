@@ -103,6 +103,7 @@ class Putinar:
             new_var = Solver.get_variable_polynomial(self.variables, 'y0', 'generated_for_putinar_in_strict_case')
             strict_poly = strict_poly + new_var
             polynomial_of_sum = polynomial_of_sum + new_var
+            all_constraints.append(CoefficientConstraint(new_var.monomials[0].coefficient, '>='))
         for i, left_constraint in enumerate(self.LHS):
             left_poly = left_constraint.polynomial
             new_sum_of_square, constraint = self.get_sum_of_square(max_d)
