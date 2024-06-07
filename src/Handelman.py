@@ -71,7 +71,8 @@ class Handelman:
         if self.RHS.is_strict():
             new_var = Solver.get_variable_polynomial(self.variables, 'y0', 'generated_for_handelman_in_strict_case')
             polynomial_of_sum = polynomial_of_sum + new_var
-            constraints.append(CoefficientConstraint(new_var.monomials[0].coefficient, '>'))
+            constraints.append(CoefficientConstraint(new_var.monomials[0].coefficient, '>='))
+            sum_of_strict = sum_of_strict + new_var
 
         for i, monoid in enumerate(all_monoid):
             new_var_poly = Solver.get_variable_polynomial(self.variables, f'y{i + 1}',
@@ -84,7 +85,6 @@ class Handelman:
 
         if need_strict or self.RHS.is_strict():
             constraints.append(CoefficientConstraint(sum_of_strict.monomials[0].coefficient, '>'))
-
         return polynomial_of_sum, constraints
 
     def get_SAT_constraint(self) -> [CoefficientConstraint]:
