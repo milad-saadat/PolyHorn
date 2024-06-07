@@ -1,0 +1,17 @@
+(set-option :print-success false)
+(set-option :produce-models true)
+(declare-const c Real)
+(declare-const y0_4 Real)
+(declare-const y1_5 Real)
+(declare-const y2_6 Real)
+(declare-const y3_7 Real)
+(declare-const y0_8 Real)
+(declare-const y1_9 Real)
+(declare-const y0_10 Real)
+(declare-const y1_11 Real)
+
+(assert  ( or ( and (= (+ 0 (- 1) (* 1 1 y2_6  ) ) 0) (= (+ 0 (* 1 1 y0_4  ) (* 1 1 y1_5  ) ) 0) (= (* 1 (- 2) y3_7  ) 0) (= (* 1 1 y3_7  ) 0) (= (* 1 1 y3_7  ) 0) (= (+ 0 1 (* 1 (- 1) y2_6  ) ) 0) (> (* 1 1 y0_4  ) 0) (>= (* 1 1 y1_5  ) 0) (>= (* 1 1 y2_6  ) 0) (>= (* 1 1 y3_7  ) 0) (> (+ 0 (* 1 1 y1_5  ) (* 1 1 y2_6  ) (* 1 1 y3_7  ) ) 0) ) ( and (= (+ 0 1 (* 1 1 y0_8  ) (* 1 1 y1_9  ) ) 0) (> (* 1 1 y0_8  ) 0) (>= (* 1 1 y1_9  ) 0) (> (+ 0 (* 1 1 y1_9  ) ) 0) ) ( and (= (+ 0 (* 1 1 y0_10  ) (* 1 1 y1_11  ) ) 0) (> (* 1 1 y0_10  ) 0) (>= (* 1 1 y1_11  ) 0) (> (+ 0 (* 1 1 y1_11  ) ) 0) )  ) )
+
+(check-sat)
+
+(get-value(c))

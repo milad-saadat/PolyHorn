@@ -1,0 +1,4 @@
+#!/bin/bash 
+
+python3 src/PolyHorn.py $1 $2 $3
+
