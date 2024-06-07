@@ -98,7 +98,7 @@ class Putinar:
         """
 
         polynomial_of_sum, all_constraints = self.get_sum_of_square(max_d)
-        strict_poly = Solver.get_constant_polynomial(self.variables, 1)
+        strict_poly = Solver.get_constant_polynomial(self.variables, 0)
         if self.RHS.is_strict():
             new_var = Solver.get_variable_polynomial(self.variables, 'y0', 'generated_for_putinar_in_strict_case')
             strict_poly = strict_poly + new_var
@@ -111,7 +111,7 @@ class Putinar:
                 strict_poly = strict_poly + new_var
                 new_sum_of_square = new_sum_of_square + new_var
 
-                all_constraints.append(CoefficientConstraint(new_var.monomials[0].coefficient, '>'))
+                all_constraints.append(CoefficientConstraint(new_var.monomials[0].coefficient, '>='))
             all_constraints = all_constraints + constraint
             polynomial_of_sum = polynomial_of_sum + (new_sum_of_square * left_poly)
         if self.RHS.is_strict():
