@@ -1,4 +1,4 @@
 #!/bin/bash 
 
-python3 src/PolyHorn.py $1 $2 $3
+python3 src/main.py --smt2 $1 --config $2
 

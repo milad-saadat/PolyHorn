@@ -1,5 +1,5 @@
-from Polynomial import Polynomial
-from Coefficient import Coefficient
+from .Polynomial import Polynomial
+from .Coefficient import Coefficient
 
 
 class PolynomialConstraint:

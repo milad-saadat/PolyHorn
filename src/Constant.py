@@ -1,3 +1,6 @@
+import os
+
+ABS_PATH = os.path.dirname(os.path.abspath(__file__))
 
 class Theorem:
     Farkas = 'farkas'
@@ -21,8 +24,8 @@ class Constant:
     }
 
     default_path = {
-        'z3': 'solver/z3',
-        'mathsat': 'solver/mathsat',
+        'z3': os.path.join(ABS_PATH, '..', 'solver', 'z3'),
+        'mathsat': os.path.join(ABS_PATH, '..', 'solver', 'mathsat'),
         'default': ''
     }
 

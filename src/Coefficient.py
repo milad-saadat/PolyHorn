@@ -1,5 +1,5 @@
 import numpy as np
-from UnknownVariable import UnknownVariable
+from .UnknownVariable import UnknownVariable
 from fractions import Fraction
 
 

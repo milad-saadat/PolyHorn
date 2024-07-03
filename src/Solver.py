@@ -1,7 +1,7 @@
-from Constraint import CoefficientConstraint
-from DNF import DNF
-from Polynomial import *
-from Coefficient import *
+from .Constraint import CoefficientConstraint
+from .DNF import DNF
+from .Polynomial import *
+from .Coefficient import *
 
 
 class Solver:

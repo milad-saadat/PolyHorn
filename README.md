@@ -24,7 +24,38 @@ chmod +x PolyHorn solver/z3 solver/mathsat
 To run PolyHorn on `input.smt2` with `config.json` the following command should be executed:
 
 ```
-./PolyHorn -smt2 input-example.smt2 config-example.json
+./PolyHorn input-example.smt2 config-example.json
+```
+
+Alternatively, the following command can be used to run PolyHorn using python directly:
+
+```
+python3 src/PolyHorn.py --smt2 input-example.smt2 --config config-example.json
+```
+
+## API Access
+
+PolyHorn can be used as a Python library. The following code snippet shows how to use PolyHorn as a library:
+
+**Step 1**: Add as submodule to your project
+
+```bash
+git submodule add https://github.com/milad-saadat/PolyHorn.git
+git submodule update --init --recursive
+```
+
+**Step 2**: Import PolyHorn and call the `execute_smt2` function
+
+```python
+from PolyHorn.src.main import execute_smt2
+
+input_file = "input-example.smt2"
+config_file = "config-example.json"
+
+with open(input_file, "r") as f:
+    smt2 = f.read()
+
+is_sat, model = execute_smt2(config_file, smt2)
 ```
 
 ## Input Syntax

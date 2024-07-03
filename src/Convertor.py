@@ -1,9 +1,9 @@
-from Polynomial import Polynomial
+from .Polynomial import Polynomial
 from lark import Lark
 import lark
-from UnknownVariable import UnknownVariable
-from Solver import Solver
-from Polynomial import Monomial
+from .UnknownVariable import UnknownVariable
+from .Solver import Solver
+from .Polynomial import Monomial
 
 
 def find_index_of_variable(name: str, all_variable: [UnknownVariable]) -> int:
