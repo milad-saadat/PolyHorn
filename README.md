@@ -30,7 +30,7 @@ To run PolyHorn on `input.smt2` with `config.json` the following command should 
 Alternatively, the following command can be used to run PolyHorn using python directly:
 
 ```
-python3 src/PolyHorn.py --smt2 input-example.smt2 --config config-example.json
+python3 src/main.py --smt2 input-example.smt2 --config config-example.json
 ```
 
 ## API Access
