@@ -1,7 +1,7 @@
-from Constraint import PolynomialConstraint
-from Solver import Solver
-from Polynomial import Polynomial
-from Constraint import CoefficientConstraint
+from .Constraint import PolynomialConstraint
+from .Solver import Solver
+from .Polynomial import Polynomial
+from .Constraint import CoefficientConstraint
 
 
 class Handelman:

@@ -1,10 +1,10 @@
 import math
 
-from Constraint import PolynomialConstraint
-from Solver import Solver
-from Polynomial import Polynomial
-from Constraint import CoefficientConstraint
-from UnknownVariable import UnknownVariable
+from .Constraint import PolynomialConstraint
+from .Solver import Solver
+from .Polynomial import Polynomial
+from .Constraint import CoefficientConstraint
+from .UnknownVariable import UnknownVariable
 import numpy as np
 
 

@@ -1,6 +1,6 @@
 import numpy as np
-from Coefficient import Coefficient
-from UnknownVariable import UnknownVariable
+from .Coefficient import Coefficient
+from .UnknownVariable import UnknownVariable
 
 
 class Monomial:

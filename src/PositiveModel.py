@@ -1,13 +1,13 @@
 import os
 import subprocess
 
-from Farkas import *
-from Handelman import *
-from Putinar import *
-from Constant import *
-from Convertor import *
-from DNF import *
-from Coefficient import *
+from .Farkas import *
+from .Handelman import *
+from .Putinar import *
+from .Constant import *
+from .Convertor import *
+from .DNF import *
+from .Coefficient import *
 
 
 class PositiveModel:
@@ -181,7 +181,7 @@ class PositiveModel:
 
 
         values = '\n'.join(output.split('\n')[1:])[1:-1].strip()
-        print(output)
+        #print(output)
         if is_sat == 'unsupported':
             is_sat = output.split('\n')[1]
             values = '\n'.join(output.split('\n')[2:])[2:-1].strip()

@@ -1,4 +1,4 @@
-from PositiveModel import *
+from .PositiveModel import *
 
 
 class Parser:

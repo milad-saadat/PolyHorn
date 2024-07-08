@@ -1,8 +1,8 @@
-from Constraint import PolynomialConstraint
-from Solver import Solver
-from Polynomial import Polynomial
-from Constraint import CoefficientConstraint
-from UnknownVariable import UnknownVariable
+from .Constraint import PolynomialConstraint
+from .Solver import Solver
+from .Polynomial import Polynomial
+from .Constraint import CoefficientConstraint
+from .UnknownVariable import UnknownVariable
 
 class Farkas:
     """ A class that performs farkas algorithm.
