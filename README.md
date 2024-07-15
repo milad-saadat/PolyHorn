@@ -47,7 +47,7 @@ git submodule update --init --recursive
 **Step 2**: Import PolyHorn and call the `execute_smt2` function
 
 ```python
-from src.main import execute_smt2
+from PolyHorn.src.main import execute_smt2
 
 input_file = "input-example.smt2"
 config_file = "config-example.json"
