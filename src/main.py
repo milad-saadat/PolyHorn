@@ -1,5 +1,5 @@
 import json
-from PolyHorn.src.Parser import *
+from src.Parser import *
 
 def load_config(config_path: str) -> dict:
     """
