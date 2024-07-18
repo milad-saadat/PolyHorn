@@ -1,5 +1,9 @@
 import json
+import uuid
+import string
+import random
 from src.Parser import *
+from src.PositiveModel import Result
 
 def load_config(config_path: str) -> dict:
     """
@@ -40,6 +44,11 @@ def execute_smt2(config_path: str, smt2: str) -> None:
 
     Parameters
     ----------
+    sat, model = parser.model.run_on_solver(output_path=config["output_path"], solver_name=config["solver_name"],
+                        core_iteration_heuristic=config['unsat_core_heuristic'],
+                        constant_heuristic=False,
+                        real_values= not config['integer_arithmetic'])
+    return sat, model
     config_path : str
         The path to the config file
     smt2 : str
@@ -99,11 +108,18 @@ def execute(config_path: str, input: str, parser_method):
                       ))
     
     parser_method(parser, input)
-    
-    sat, model = parser.model.run_on_solver(output_path=config["output_path"], solver_name=config["solver_name"],
-                        core_iteration_heuristic=config['unsat_core_heuristic'],
-                        constant_heuristic=False,
-                        real_values= not config['integer_arithmetic'])
+    try:
+        if "output_path" not in config:
+            config["output_path"] = './POLYHORN_delme_' + str(uuid.uuid4()) + ''.join(
+                random.choices(string.ascii_uppercase + string.digits, k=9))
+            with open(config["output_path"], 'x') as file:
+                file.write("")
+        sat, model = parser.model.run_on_solver(output_path=config["output_path"], solver_name=config["solver_name"],
+                                                core_iteration_heuristic=config['unsat_core_heuristic'],
+                                                constant_heuristic=False,
+                                                real_values=not config['integer_arithmetic'])
+    finally:
+        os.remove(config["output_path"])
     return sat, model
 
 
@@ -126,8 +142,8 @@ if __name__ == "__main__":
     else:
         raise ValueError("Either --smt2 or --readable must be provided")
     
-    print(f"The system is {'SAT' if is_sat else 'UNSAT'}")
-    if is_sat:
+    print(f"The system is {is_sat.name}")
+    if is_sat is Result.SAT:
         print("Model:")
         for var, value in model.items():
             print(f"{var}: {value}")

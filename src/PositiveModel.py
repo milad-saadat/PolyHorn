@@ -8,6 +8,12 @@ from .Constant import *
 from .Convertor import *
 from .DNF import *
 from .Coefficient import *
+from enum import Enum
+
+class Result(Enum):
+    SAT = 1
+    UNSAT = 2
+    UNKNOWN = 3
 
 
 class PositiveModel:
@@ -186,7 +192,9 @@ class PositiveModel:
             is_sat = output.split('\n')[1]
             values = '\n'.join(output.split('\n')[2:])[2:-1].strip()
         if is_sat == 'unsat':
-            return False, {}
+            return Result.UNSAT, {}
+        if is_sat != 'sat':
+            return Result.UNKNOWN, {}
         values_of_variable = {}
 
         for line in values.split('\n'):
@@ -202,7 +210,7 @@ class PositiveModel:
         for var in values_of_variable.keys():
             result_dictionary[var] = values_of_variable[var]
 
-        return True, result_dictionary
+        return Result.SAT, result_dictionary
 
     @staticmethod
     def get_equality_constraint(all_constraint: [DNF]):
