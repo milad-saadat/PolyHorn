@@ -108,8 +108,10 @@ def execute(config_path: str, input: str, parser_method):
                       ))
     
     parser_method(parser, input)
+    output_path_exists = True
     try:
         if "output_path" not in config:
+            output_path_exists = False
             config["output_path"] = './POLYHORN_delme_' + str(uuid.uuid4()) + ''.join(
                 random.choices(string.ascii_uppercase + string.digits, k=9))
             with open(config["output_path"], 'x') as file:
@@ -119,7 +121,8 @@ def execute(config_path: str, input: str, parser_method):
                                                 constant_heuristic=False,
                                                 real_values=not config['integer_arithmetic'])
     finally:
-        os.remove(config["output_path"])
+        if not output_path_exists:
+            os.remove(config["output_path"])
     return sat, model
 
 
