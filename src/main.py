@@ -44,11 +44,6 @@ def execute_smt2(config_path: str, smt2: str) -> None:
 
     Parameters
     ----------
-    sat, model = parser.model.run_on_solver(output_path=config["output_path"], solver_name=config["solver_name"],
-                        core_iteration_heuristic=config['unsat_core_heuristic'],
-                        constant_heuristic=False,
-                        real_values= not config['integer_arithmetic'])
-    return sat, model
     config_path : str
         The path to the config file
     smt2 : str
