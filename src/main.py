@@ -1,9 +1,11 @@
 import json
+
 import uuid
 import string
 import random
 from src.Parser import *
 from src.PositiveModel import Result
+
 
 def load_config(config_path: str) -> dict:
     """
@@ -119,6 +121,7 @@ def execute(config_path: str, input: str, parser_method):
         if not output_path_exists:
             os.remove(config["output_path"])
     return sat, model
+
 
 
 if __name__ == "__main__":
