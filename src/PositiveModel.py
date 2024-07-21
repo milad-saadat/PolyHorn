@@ -105,12 +105,26 @@ class PositiveModel:
         """
         all_constraint = []
         for pair in self.paired_constraint:
-            if self.theorem_name == Theorem.Farkas:
+            theorem = self.theorem_name
+            if theorem == 'auto':
+                lhs_linear = True
+                rhs_linear = pair[1].polynomial.is_linear()
+                for cons in pair[0]:
+                    if not cons.polynomial.is_linear():
+                        lhs_linear = False
+                if lhs_linear and rhs_linear:
+                    theorem = 'farkas'
+                elif lhs_linear:
+                    theorem = 'handelman'
+                else:
+                    theorem = 'putinar'
+
+            if theorem == Theorem.Farkas:
                 model = Farkas(variables=pair[2], LHS=pair[0], RHS=pair[1])
-            elif self.theorem_name == Theorem.Handelman:
+            elif theorem == Theorem.Handelman:
                 model = Handelman(variables=pair[2], LHS=pair[0], RHS=pair[1],
                                   max_d_for_sat=self.degree_of_sat, max_d_for_unsat=self.degree_of_nonstrict_unsat)
-            elif self.theorem_name == Theorem.Putinar:
+            elif theorem == Theorem.Putinar:
                 model = Putinar(variables=pair[2], LHS=pair[0], RHS=pair[1],
                                 max_d_for_sat=self.degree_of_sat, max_d_for_unsat=self.degree_of_nonstrict_unsat,
                                 max_d_for_unsat_strict=self.degree_of_strict_unsat,

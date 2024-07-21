@@ -75,6 +75,14 @@ class Monomial:
                 """
         return Monomial(self.variables, self.degrees, -self.coefficient)
 
+    def is_mono(self):
+        number_of_nonzero = 0
+        for deg in self.degrees:
+            if deg != 0 and deg != 1:
+                return False
+            number_of_nonzero += deg
+        return (number_of_nonzero <= 1)
+
     def convert_to_preorder(self) -> str:
         """ convert Monomial to preorder format.
 
@@ -205,6 +213,12 @@ class Polynomial:
                                       monomial.coefficient)
                              )
         return Polynomial(self.variables + new_variables, monomials)
+
+    def is_linear(self):
+        for mono in self.monomials:
+            if not mono.is_mono():
+                return False
+        return True
 
     def convert_to_preorder(self) -> str:
         """ convert Polynomial to preorder format.
