@@ -182,6 +182,21 @@ class Parser:
                     return result_dnf
 
         elif parse_tree.data == 'constraint':
+            if parse_tree.children[0] == '=':
+                return DNF(
+                    [[
+                        PolynomialConstraint(
+                            self.traverse_smt_tree(parse_tree.children[1])
+                            -
+                            self.traverse_smt_tree(parse_tree.children[2]),
+                            '>='),
+                        PolynomialConstraint(
+                            self.traverse_smt_tree(parse_tree.children[1])
+                            -
+                            self.traverse_smt_tree(parse_tree.children[2]),
+                            '<='),
+
+                    ]])
             return DNF(
                 [[
                     PolynomialConstraint(
