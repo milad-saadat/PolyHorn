@@ -1,5 +1,11 @@
 import json
-from .Parser import *
+
+import uuid
+import string
+import random
+from src.Parser import *
+from src.PositiveModel import Result
+
 
 def load_config(config_path: str) -> dict:
     """
@@ -99,9 +105,46 @@ def execute(config_path: str, input: str, parser_method):
                       ))
     
     parser_method(parser, input)
-    
-    sat, model = parser.model.run_on_solver(output_path=config["output_path"], solver_name=config["solver_name"],
-                        core_iteration_heuristic=config['unsat_core_heuristic'],
-                        constant_heuristic=False,
-                        real_values= not config['integer_arithmetic'])
+    output_path_exists = True
+    try:
+        if "output_path" not in config:
+            output_path_exists = False
+            config["output_path"] = './POLYHORN_delme_' + str(uuid.uuid4()) + ''.join(
+                random.choices(string.ascii_uppercase + string.digits, k=9))
+            with open(config["output_path"], 'x') as file:
+                file.write("")
+        sat, model = parser.model.run_on_solver(output_path=config["output_path"], solver_name=config["solver_name"],
+                                                core_iteration_heuristic=config['unsat_core_heuristic'],
+                                                constant_heuristic=False,
+                                                real_values=not config['integer_arithmetic'])
+    finally:
+        if not output_path_exists:
+            os.remove(config["output_path"])
     return sat, model
+
+
+
+if __name__ == "__main__":
+    from argparse import ArgumentParser
+    parser = ArgumentParser()
+    parser.add_argument("--smt2", type=str, help="Path to the smt2 file")
+    parser.add_argument("--readable", type=str, help="Path to the readable file")
+    parser.add_argument("--config", type=str, required=True, help="Path to the config file")
+    args = parser.parse_args()
+
+    if args.smt2:
+        with open(args.smt2, "r") as file:
+            smt2 = file.read()
+        is_sat, model = execute_smt2(args.config, smt2)
+    elif args.readable:
+        with open(args.readable, "r") as file:
+            readable = file.read()
+        is_sat, model = execute_readable(args.config, readable)
+    else:
+        raise ValueError("Either --smt2 or --readable must be provided")
+    
+    print(f"The system is {is_sat.name}")
+    if is_sat is Result.SAT:
+        print("Model:")
+        for var, value in model.items():
+            print(f"{var}: {value}")
