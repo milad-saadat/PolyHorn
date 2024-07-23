@@ -1,4 +1,5 @@
 from src.main import execute_smt2, execute_readable
+from src.PositiveModel import Result
 
 if __name__ == "__main__":
     from argparse import ArgumentParser
@@ -19,8 +20,8 @@ if __name__ == "__main__":
     else:
         raise ValueError("Either --smt2 or --readable must be provided")
     
-    print(f"The system is {'SAT' if is_sat else 'UNSAT'}")
-    if is_sat:
+    print(f"The system is {is_sat.name}")
+    if is_sat is Result.SAT:
         print("Model:")
         for var, value in model.items():
             print(f"{var}: {value}")
