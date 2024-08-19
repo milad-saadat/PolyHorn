@@ -1,7 +1,5 @@
 #!/bin/bash 
 
-#!/bin/bash
-
 # This script takes two path parameters and calls another script with these absolute paths.
 
 # Check if exactly two arguments are given
@@ -18,7 +16,7 @@ absolute_path2=$(realpath "$2")
 script_dir=$(dirname "$(readlink -f "$0")")
 
 # Path to the script to be called, assumed to be in the same directory as this script
-script_to_call="$script_dir/src/main_cmd.py"
+script_to_call="$script_dir/src/polyhorn/main.py"
 
 # Check if the script to be called exists and is executable
 if [ ! -f "$script_to_call" ]; then
