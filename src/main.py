@@ -101,7 +101,8 @@ def execute(config_path: str, input: str, parser_method):
                       config['theorem_name'],
                       True, not config['SAT_heuristic'], not config['SAT_heuristic'],
                       config['degree_of_sat'], config['degree_of_nonstrict_unsat'],
-                      config['degree_of_strict_unsat'], config['max_d_of_strict']
+                      config['degree_of_strict_unsat'], config['max_d_of_strict'],
+                      preconditions=[],
                       ))
     
     parser_method(parser, input)
