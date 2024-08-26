@@ -3,8 +3,7 @@ import json
 import uuid
 import string
 import random
-from src.Parser import *
-from src.PositiveModel import Result
+from polyhorn.Parser import *
 
 
 def load_config(config_path: str) -> dict:
@@ -101,7 +100,8 @@ def execute(config_path: str, input: str, parser_method):
                       config['theorem_name'],
                       True, not config['SAT_heuristic'], not config['SAT_heuristic'],
                       config['degree_of_sat'], config['degree_of_nonstrict_unsat'],
-                      config['degree_of_strict_unsat'], config['max_d_of_strict']
+                      config['degree_of_strict_unsat'], config['max_d_of_strict'],
+                      preconditions=[],
                       ))
     
     parser_method(parser, input)
@@ -123,7 +123,6 @@ def execute(config_path: str, input: str, parser_method):
     return sat, model
 
 
-
 if __name__ == "__main__":
     from argparse import ArgumentParser
     parser = ArgumentParser()
@@ -143,8 +142,8 @@ if __name__ == "__main__":
     else:
         raise ValueError("Either --smt2 or --readable must be provided")
     
-    print(f"The system is {is_sat.name}")
-    if is_sat is Result.SAT:
+    print(f"The system is {is_sat}")
+    if is_sat == 'sat':
         print("Model:")
         for var, value in model.items():
             print(f"{var}: {value}")

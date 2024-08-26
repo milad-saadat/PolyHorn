@@ -4,16 +4,23 @@ PolyHorn is a solver for Polynomial Constrained Horn Clauses (pCHC).
 
 Given an input pCHC in SMT-LIB format and a config file, PolyHorn tried to find a valuation of the unknown variables in the input such that all the pCHCs are satisfied. 
 
-## Dependencies
 
-PolyHorn is written in Python. So, a Python interpreter is needed for running the tool. We suggest Python >=3.9 for best performance. Additionally, the tool depends on the following libraries:
- - `Lark` Python library
- - `NumPy` Python library
- - GNU C library `glibc` and Gnu Multiprecision Library `GMP` are also required if you want to make use of MathSAT. 
+## Getting Started
+PolyHorn is written in Python and can be run as a standalone tool or as a Python library. Either way, the input to PolyHorn is an SMT-LIB instance containing the pCHC and a config file specifying the theorem and solver to be used. 
 
-## Installation
+The tool is tested for Python >=3.9 and requires the installation of:
+- `Z3` many package managers provide Z3 as a package. For example, in Ubuntu, Z3 can be installed using `sudo apt-get install z3`. Otherwise, you can find more information [here](https://github.com/Z3Prover/z3)
+- `MathSAT` can be downloaded from [here](http://mathsat.fbk.eu/download.html).
+- GNU C library `glibc` and Gnu Multiprecision Library `GMP` are also required
 
-The Python backend of the tool does not require any installation. However, in order to run PolyHorn, Z3 and MathSAT, the following command should be executed first:
+Next, we can install the package using the following command:
+```bash
+pip install polyhorn
+```
+
+## Standalone tool
+
+When using the tool via the commandline right from the repository, you can use the accompanying solvers from the subfolder `solver/`. For this you do not require any installation, however, in order to run PolyHorn, Z3 and MathSAT, this following command should be executed first:
 
 ```
 chmod +x PolyHorn solver/z3 solver/mathsat
@@ -30,24 +37,15 @@ To run PolyHorn on `input.smt2` with `config.json` the following command should 
 Alternatively, the following command can be used to run PolyHorn using python directly:
 
 ```
-python3 src/main_cmd.py --smt2 input-example.smt2 --config config-example.json
+python3 src/polyhorn/main.py --smt2 input-example.smt2 --config config-example.json
 ```
 
 ## API Access
 
-PolyHorn can be used as a Python library. The following code snippet shows how to use PolyHorn as a library:
-
-**Step 1**: Add as submodule to your project
-
-```bash
-git submodule add https://github.com/milad-saadat/PolyHorn.git
-git submodule update --init --recursive
-```
-
-**Step 2**: Import PolyHorn and call the `execute_smt2` function
+PolyHorn can be used as a Python library. The following code snippet shows how to use PolyHorn as a library after the whole installation process is completed.
 
 ```python
-from PolyHorn.src.main import execute_smt2
+from polyhorn.main import execute_smt2
 
 input_file = "input-example.smt2"
 config_file = "config-example.json"

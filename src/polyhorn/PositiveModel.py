@@ -10,11 +10,6 @@ from .DNF import *
 from .Coefficient import *
 from enum import Enum
 
-class Result(Enum):
-    SAT = 1
-    UNSAT = 2
-    UNKNOWN = 3
-
 
 class PositiveModel:
     """ This class is the main class which gets some horn clause as input and find the constraints based on the given
@@ -194,6 +189,9 @@ class PositiveModel:
 
 
         solver_path = Constant.default_path[solver_name]
+        if solver_path is None:
+            print(f"ERROR: Solver {solver_name} is not installed")
+            return 'unknown', {}
 
         self.create_smt_file(output_path, solver_name, solver_path, core_iteration_heuristic, constant_heuristic, real_values)
         output = subprocess.getoutput(f'{solver_path} {Constant.command[solver_name]} {output_path}')
@@ -206,9 +204,9 @@ class PositiveModel:
             is_sat = output.split('\n')[1]
             values = '\n'.join(output.split('\n')[2:])[2:-1].strip()
         if is_sat == 'unsat':
-            return Result.UNSAT, {}
+            return 'unsat', {}
         if is_sat != 'sat':
-            return Result.UNKNOWN, {}
+            return 'unknown', {}
         values_of_variable = {}
 
         for line in values.split('\n'):
@@ -222,9 +220,9 @@ class PositiveModel:
                     break
         result_dictionary = {}
         for var in values_of_variable.keys():
-            result_dictionary[var] = values_of_variable[var]
+            result_dictionary[var.name] = values_of_variable[var]
 
-        return Result.SAT, result_dictionary
+        return 'sat', result_dictionary
 
     @staticmethod
     def get_equality_constraint(all_constraint: [DNF]):
