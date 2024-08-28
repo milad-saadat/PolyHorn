@@ -1,4 +1,7 @@
+from typing import List
+
 import numpy as np
+
 from .Coefficient import Coefficient
 from .UnknownVariable import UnknownVariable
 
@@ -15,7 +18,7 @@ class Monomial:
 
     """
 
-    def __init__(self, variables: [UnknownVariable], degrees: [int], coefficient: Coefficient):
+    def __init__(self, variables: List[UnknownVariable], degrees: List[int], coefficient: Coefficient):
         variables.sort()
         self.variables = variables
         self.degrees = degrees
@@ -93,7 +96,7 @@ class Monomial:
 
         for i, var in enumerate(self.variables):
             for _ in range(self.degrees[i]):
-                preorder +=  str(var)
+                preorder += str(var)
         preorder += ' )'
         return preorder
 
@@ -110,16 +113,17 @@ class Polynomial:
 
     """
 
-    def __init__(self, variables: [UnknownVariable], monomials: [Monomial]):
+    def __init__(self, variables: List[UnknownVariable], monomials: List[Monomial]):
         variables.sort()
         monomials.sort()
         self.variables = variables
         self.monomials = monomials
         self.dict_from_degrees_to_monomials = {}
         for monomial in self.monomials:
-            self.dict_from_degrees_to_monomials[tuple(monomial.degrees)] = monomial
+            self.dict_from_degrees_to_monomials[tuple(
+                monomial.degrees)] = monomial
 
-    def get_monomial_by_degree(self, degree: [int]) -> Monomial:
+    def get_monomial_by_degree(self, degree: List[int]) -> Monomial:
         if degree in self.dict_from_degrees_to_monomials.keys():
             return self.dict_from_degrees_to_monomials[degree]
         return Monomial(self.variables, [0] * len(self.variables), Coefficient([]))
@@ -195,12 +199,13 @@ class Polynomial:
                 else:
                     break
                 j += 1
-            new_list.append(Monomial(self.monomials[i].variables, self.monomials[i].degrees, coefficient))
+            new_list.append(
+                Monomial(self.monomials[i].variables, self.monomials[i].degrees, coefficient))
             i = j
 
         return Polynomial(self.variables, new_list)
 
-    def add_variables(self, new_variables: [UnknownVariable]):
+    def add_variables(self, new_variables: List[UnknownVariable]):
         """ This function add a set of new variable to each Monomial of a Polynomial.
 
         :param new_variables :  the list of the new variables that should add to the Polynomial.
@@ -209,7 +214,8 @@ class Polynomial:
         monomials = []
         for monomial in self.monomials:
             monomials.append(Monomial(monomial.variables + new_variables,
-                                      monomial.degrees + [0] * len(new_variables),
+                                      monomial.degrees +
+                                      [0] * len(new_variables),
                                       monomial.coefficient)
                              )
         return Polynomial(self.variables + new_variables, monomials)
@@ -231,6 +237,6 @@ class Polynomial:
             return self.monomials[0].convert_to_preorder()
         preorder = '( + 0 '
         for i in range(0, len(self.monomials)):
-            preorder +=  self.monomials[i].convert_to_preorder() + ' '
+            preorder += self.monomials[i].convert_to_preorder() + ' '
         preorder += ' )'
         return preorder

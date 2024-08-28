@@ -21,7 +21,8 @@ classifiers = [
 ]
 dependencies = [
     "numpy",
-    "lark"
+    "lark",
+    "pysmt"
 ]
 
 [project.urls]

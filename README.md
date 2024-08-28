@@ -26,7 +26,7 @@ When using the tool via the commandline right from the repository, you can use t
 chmod +x PolyHorn solver/z3 solver/mathsat
 ```
 
-## Running PolyHorn 
+### Running PolyHorn 
 
 To run PolyHorn on `input.smt2` with `config.json` the following command should be executed:
 
@@ -45,16 +45,18 @@ python3 src/polyhorn/main.py --smt2 input-example.smt2 --config config-example.j
 PolyHorn can be used as a Python library. The following code snippet shows how to use PolyHorn as a library after the whole installation process is completed.
 
 ```python
-from polyhorn.main import execute_smt2
+from polyhorn.main import execute
 
 input_file = "input-example.smt2"
 config_file = "config-example.json"
 
-with open(input_file, "r") as f:
-    smt2 = f.read()
-
-is_sat, model = execute_smt2(config_file, smt2)
+is_sat, model = execute(input_file, config_file)
 ```
+
+The `execute` function allows for several different input combinations. The first argument can be the path to an `.smt2` input file or an instance os the `pysmt.solvers.solver.Solver` class with the assertions already added. The second argument can be the path to a `.json` config file or a dictionary with the configuration parameters. 
+
+A further example of how to use PolyHorn as a library can be found in the `example_api.py` file.
+
 
 ## Input Syntax
 

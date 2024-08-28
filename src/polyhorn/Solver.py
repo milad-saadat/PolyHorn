@@ -1,7 +1,9 @@
+from typing import List
+
+from .Coefficient import Element
 from .Constraint import CoefficientConstraint
 from .DNF import DNF
-from .Polynomial import *
-from .Coefficient import *
+from .Polynomial import Coefficient, Monomial, Polynomial, UnknownVariable
 
 
 class Solver:
@@ -10,7 +12,7 @@ class Solver:
     """
 
     @staticmethod
-    def find_equality_constraint(LHS: Polynomial, RHS: Polynomial) -> [CoefficientConstraint]:
+    def find_equality_constraint(LHS: Polynomial, RHS: Polynomial) -> List[CoefficientConstraint]:
         """ given two polynomial that should be equal together, this function finds constraint for the equality.
         Moreover, all the Coefficient of each Monomial in each side should be equal.
 
@@ -29,13 +31,14 @@ class Solver:
         for degree in all_degree:
             mono1 = LHS.get_monomial_by_degree(degree)
             mono2 = RHS.get_monomial_by_degree(degree)
-            constraint = CoefficientConstraint(mono1.coefficient - mono2.coefficient, '=')
+            constraint = CoefficientConstraint(
+                mono1.coefficient - mono2.coefficient, '=')
             all_constraint.append(constraint)
 
         return all_constraint
 
     @staticmethod
-    def get_constant_polynomial(variables: [UnknownVariable], constant) -> Polynomial:
+    def get_constant_polynomial(variables: List[UnknownVariable], constant) -> Polynomial:
         """generate new polynomial with one monomial and a constant as its coefficient
 
                 :param variables: polynomial variables
@@ -52,7 +55,7 @@ class Solver:
                           )
 
     @staticmethod
-    def get_variable_polynomial(variables: [UnknownVariable], name: str, type_of_var: str = None) -> Polynomial:
+    def get_variable_polynomial(variables: List[UnknownVariable], name: str, type_of_var: str = None) -> Polynomial:
         """generate new polynomial with one monomial and a new generated variable as its coefficient
 
         :param variables: polynomial variables
@@ -71,7 +74,7 @@ class Solver:
                           )
 
     @staticmethod
-    def get_degree_polynomial(variables: [UnknownVariable], degrees: [int]) -> Polynomial:
+    def get_degree_polynomial(variables: List[UnknownVariable], degrees: List[int]) -> Polynomial:
         """ generate new polynomial with one monomial and given degrees
 
         :param variables: polynomial variables
@@ -88,7 +91,7 @@ class Solver:
                           )
 
     @staticmethod
-    def convert_constraints_to_smt_format(all_constraint: [DNF], precondition, names: [str] = None) -> str:
+    def convert_constraints_to_smt_format(all_constraint: List[DNF], precondition, names: List[str] = None) -> str:
         """ generate string for declaring constraint in smt format
 
         :param all_constraint: constraint that should be converted to smt format
@@ -98,20 +101,24 @@ class Solver:
         smt_string = ''
         for i, constraint in enumerate(all_constraint):
             if names is None:
-                smt_string = smt_string + f'(assert  {constraint.convert_to_preorder()} )\n'
+                smt_string = smt_string + \
+                    f'(assert  {constraint.convert_to_preorder()} )\n'
             else:
-                smt_string = smt_string + f'(assert ( ! {constraint.convert_to_preorder()} :named {names[i]}))\n'
+                smt_string = smt_string + \
+                    f'(assert ( ! {constraint.convert_to_preorder()} :named {names[i]}))\n'
 
         for constraint in precondition:
             if len(constraint) == 1:
-                smt_string = smt_string + f'(assert  {constraint[0].convert_to_preorder()} )\n'
+                smt_string = smt_string + \
+                    f'(assert  {constraint[0].convert_to_preorder()} )\n'
             elif len(constraint) == 2:
-                smt_string = smt_string + f'(assert (=> {constraint[0].convert_to_preorder()} {constraint[1].convert_to_preorder()}))\n'
+                smt_string = smt_string + \
+                    f'(assert (=> {constraint[0].convert_to_preorder()} {constraint[1].convert_to_preorder()}))\n'
         return smt_string
 
     @staticmethod
-    def smt_declare_variable_phase(all_constraint: [DNF], real: bool = True,
-                                   pre_variables: [UnknownVariable] = []) -> str:
+    def smt_declare_variable_phase(all_constraint: List[DNF], real: bool = True,
+                                   pre_variables: List[UnknownVariable] = []) -> str:
         """ generate string format for declaring the variables in smt format
 
         :param all_constraint: constraint that their variable should be generated
@@ -132,7 +139,7 @@ class Solver:
         return smt_string
 
     @staticmethod
-    def get_all_variable(all_constraints: [DNF], pre_variables: [UnknownVariable] = []) -> [UnknownVariable]:
+    def get_all_variable(all_constraints: List[DNF], pre_variables: List[UnknownVariable] = []) -> List[UnknownVariable]:
         """ find all the variables in a list of constraint
 
         :param all_constraints: list of constraints
@@ -144,6 +151,7 @@ class Solver:
             for literal in dnf.literals:
                 for constraint in literal:
                     for element in constraint.coefficient.elements:
-                        all_variables = all_variables.union(set([var for var in element.variables]))
+                        all_variables = all_variables.union(
+                            set([var for var in element.variables]))
 
         return all_variables
