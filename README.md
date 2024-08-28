@@ -90,3 +90,12 @@ The default value is 0 for all integer parameters and `false` for all boolean pa
 See `config-example.json` as an example. 
 
  [1] Polynomial Reachability Witnesses via Stellensätze. Asadi et. al. PLDI 2021.
+
+## Citing
+
+If you want to cite PolyHorn, please use the following reference:\
+K. Chatterjee, A. K. Goharshady, E. K. Goharshady, M. Karrabi, M. Saadat, D. Zikelic\
+PolyHorn: A Polynomial Horn Clause Solver\
+arXiv 2024, [https://arxiv.org/abs/2408.03796]
+
+
