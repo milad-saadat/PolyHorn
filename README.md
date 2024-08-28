@@ -71,7 +71,7 @@ The input syntax of PolyHorn follows the SMTLIB syntax:
  - the `(check-sat)` command at the end specifies that PolyHorn should run an SMT-solver after obtaining a fully existential system of polynomials. 
  - the `(get-model)` command means that in case the SMT-solver returned `sat`, the values for unknown variables should be printed. 
 
- See `example.smt2` as an example. 
+ See `input-example.smt2` as an example. 
 
  ## Config files
 
