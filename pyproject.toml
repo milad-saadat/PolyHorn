@@ -6,13 +6,13 @@ build-backend = "setuptools.build_meta"
 name = "polyhorn"
 version = "0.0.2"
 authors = [  
-  { name="Krishnendu Chatterjee", email="krishnendu.chatterjee@ist.ac.at" }
-  { name="Amir Kafshdar Goharshady", email="goharshady@cse.ust.hk" }
+  { name="Krishnendu Chatterjee", email="krishnendu.chatterjee@ist.ac.at" },
+  { name="Amir Kafshdar Goharshady", email="goharshady@cse.ust.hk" },
   { name="Ehsan Kafshdar Goharshady", email="ehsan.goharshady@ist.ac.at" },
   { name="Mehrdad Karrabi", email="mehrdad.karrabi@ist.ac.at" },
   { name="Milad Saadat", email="milad.saadat@sharif.edu" },
-  { name="Maximilian Seeliger", email="maximilian.seeliger@tuwien.ac.at" }
-  { name="Djordje Zikelic", email="dzikelic@smu.edu.sg" }
+  { name="Maximilian Seeliger", email="maximilian.seeliger@tuwien.ac.at" },
+  { name="Djordje Zikelic", email="dzikelic@smu.edu.sg" },
 ]
 description = "PolyHorn is a solver for Polynomial Constrained Horn Clauses (pCHC)."
 readme = "README.md"
