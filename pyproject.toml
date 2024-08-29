@@ -12,7 +12,7 @@ authors = [
   { name="Mehrdad Karrabi", email="mehrdad.karrabi@ist.ac.at" },
   { name="Milad Saadat", email="milad.saadat@sharif.edu" },
   { name="Maximilian Seeliger", email="maximilian.seeliger@tuwien.ac.at" }
-  { name="Dorde Zikelic", email="dzikelic@smu.edu.sg" }
+  { name="Djordje Zikelic", email="dzikelic@smu.edu.sg" }
 ]
 description = "PolyHorn is a solver for Polynomial Constrained Horn Clauses (pCHC)."
 readme = "README.md"
