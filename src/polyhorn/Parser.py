@@ -1,4 +1,12 @@
-from .PositiveModel import *
+import lark
+from lark import Lark
+
+from .Constraint import PolynomialConstraint
+from .Convertor import convert_to_desired_poly, find_index_of_variable
+from .DNF import DNF
+from .PositiveModel import PositiveModel
+from .Solver import Solver
+from .UnknownVariable import UnknownVariable
 
 
 class Parser:
@@ -12,11 +20,13 @@ class Parser:
                 self.traverse_readable_tree(child)
         elif parse_tree.data == 'program_var':
             for child in parse_tree.children:
-                self.model.program_variables.append(UnknownVariable(str(child), type_of_var='program_var'))
+                self.model.program_variables.append(
+                    UnknownVariable(str(child), type_of_var='program_var'))
 
         elif parse_tree.data == 'template_var':
             for child in parse_tree.children:
-                self.model.template_variables.append(UnknownVariable(str(child), type_of_var='template_var'))
+                self.model.template_variables.append(
+                    UnknownVariable(str(child), type_of_var='template_var'))
 
         elif parse_tree.data == 'hornclause':
             lhs = self.traverse_readable_tree(parse_tree.children[0])
@@ -41,7 +51,8 @@ class Parser:
         elif parse_tree.data == 'literal':
             literal = []
             for i in range(len(parse_tree.children)):
-                literal.append(self.traverse_readable_tree(parse_tree.children[i]))
+                literal.append(self.traverse_readable_tree(
+                    parse_tree.children[i]))
             return literal
         elif parse_tree.data == 'constraint':
             return DNF([[PolynomialConstraint(
@@ -86,7 +97,8 @@ class Parser:
                 deg = 1
                 if len(parse_tree.children) > 1:
                     deg = int(parse_tree.children[1])
-                degrees = [0] * len(self.model.template_variables + self.model.program_variables)
+                degrees = [
+                    0] * len(self.model.template_variables + self.model.program_variables)
                 degrees[find_index_of_variable(str(parse_tree.children[0]),
                                                self.model.template_variables + self.model.program_variables)] = deg
                 return Solver.get_degree_polynomial(self.model.template_variables + self.model.program_variables,
@@ -154,10 +166,12 @@ class Parser:
                 self.traverse_smt_tree(parse_tree.children[i])
             lhs = self.traverse_smt_tree(parse_tree.children[-2])
             rhs = self.traverse_smt_tree(parse_tree.children[-1])
-            self.model.add_paired_constraint(lhs, rhs, self.model.program_variables)
+            self.model.add_paired_constraint(
+                lhs, rhs, self.model.program_variables)
             return
         elif parse_tree.data == 'program_variables':
-            self.model.program_variables.append(UnknownVariable(str(parse_tree.children[0]), type_of_var='program_var'))
+            self.model.program_variables.append(UnknownVariable(
+                str(parse_tree.children[0]), type_of_var='program_var'))
         elif parse_tree.data == 'precondition':
             dnf = self.traverse_smt_tree(parse_tree.children[0])
             if len(parse_tree.children) == 2:
@@ -173,12 +187,14 @@ class Parser:
                 if str(parse_tree.children[0]) == "and":
                     result_dnf = DNF([])
                     for i in range(1, len(parse_tree.children)):
-                        result_dnf = result_dnf & self.traverse_smt_tree(parse_tree.children[i])
+                        result_dnf = result_dnf & self.traverse_smt_tree(
+                            parse_tree.children[i])
                     return result_dnf
                 else:
                     result_dnf = DNF([])
                     for i in range(1, len(parse_tree.children)):
-                        result_dnf = result_dnf | self.traverse_smt_tree(parse_tree.children[i])
+                        result_dnf = result_dnf | self.traverse_smt_tree(
+                            parse_tree.children[i])
                     return result_dnf
 
         elif parse_tree.data == 'constraint':
@@ -211,7 +227,8 @@ class Parser:
             if len(parse_tree.children) == 1:
                 if parse_tree.children[0].data == "fraction":
                     return Solver.get_constant_polynomial(self.model.template_variables + self.model.program_variables,
-                                                          self.traverse_smt_tree(parse_tree.children[0])
+                                                          self.traverse_smt_tree(
+                                                              parse_tree.children[0])
                                                           )
                 return self.traverse_smt_tree(parse_tree.children[0])
             elif len(parse_tree.children) == 2:
@@ -234,9 +251,11 @@ class Parser:
                 poly = self.traverse_smt_tree(parse_tree.children[1])
                 for i in range(2, len(parse_tree.children)):
                     if str(parse_tree.children[0]) == '+':
-                        poly = poly + self.traverse_smt_tree(parse_tree.children[i])
+                        poly = poly + \
+                            self.traverse_smt_tree(parse_tree.children[i])
                     else:
-                        poly = poly * self.traverse_smt_tree(parse_tree.children[i])
+                        poly = poly * \
+                            self.traverse_smt_tree(parse_tree.children[i])
                 return poly
         elif parse_tree.data == 'primary':
             if type(parse_tree.children[0]) is lark.tree.Tree:
@@ -247,7 +266,8 @@ class Parser:
                 deg = 1
                 if len(parse_tree.children) > 1:
                     deg = int(parse_tree.children[1])
-                degrees = [0] * len(self.model.template_variables + self.model.program_variables)
+                degrees = [
+                    0] * len(self.model.template_variables + self.model.program_variables)
                 degrees[find_index_of_variable(str(parse_tree.children[0]),
                                                self.model.template_variables + self.model.program_variables)] = deg
                 return Solver.get_degree_polynomial(self.model.template_variables + self.model.program_variables,

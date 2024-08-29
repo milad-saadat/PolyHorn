@@ -1,10 +1,14 @@
+from typing import List
+
+
 class DNF:
     """A class that represents disjunctive normal form.
 
         Attributes:
             literals ([]): list of elements that the or of these elements form the DNF.
     """
-    def __init__(self, literals:[]):
+
+    def __init__(self, literals: List):
         self.literals = literals
 
     def __or__(self, other):

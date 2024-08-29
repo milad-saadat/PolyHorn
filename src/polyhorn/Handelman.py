@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 from .Constraint import PolynomialConstraint
 from .Solver import Solver
 from .Polynomial import Polynomial
@@ -15,7 +17,7 @@ class Handelman:
                 max_d_for_unsat (int) : maximum degree of monoids when finding unsat constraints
     """
 
-    def __init__(self, variables, LHS: [PolynomialConstraint], RHS: PolynomialConstraint,
+    def __init__(self, variables, LHS: List[PolynomialConstraint], RHS: PolynomialConstraint,
                  max_d_for_sat: int = 0, max_d_for_unsat: int = 0):
         self.variables = variables
         self.RHS = RHS
@@ -30,7 +32,7 @@ class Handelman:
         for i in range(max_d - sum(lst)+1):
             ans = ans + self.get_lists_with_fixed_len(lst + [i], n, max_d)
         return ans
-    def get_monoids(self, max_d: int) -> ([Polynomial], [bool]):
+    def get_monoids(self, max_d: int) -> Tuple[List[Polynomial], List[bool]]:
         """ this function creates monoids of given the degree of all left hand side polynomials
 
         :param max_d: maximum degree of each monoid
@@ -54,7 +56,7 @@ class Handelman:
 
         return monoids, is_strict
 
-    def get_poly_sum(self, max_d: int, need_strict: bool = False) -> (Polynomial, CoefficientConstraint):
+    def get_poly_sum(self, max_d: int, need_strict: bool = False) -> Tuple[Polynomial, CoefficientConstraint]:
         """ This function returns a polynomial y_0 + y_1*f_1 + y_2*f_2 ...+ y_n*f_n where f_i are monoids of left hand side
         polynomials and y_i are newly created variable in handelman theorem
 
@@ -87,7 +89,7 @@ class Handelman:
             constraints.append(CoefficientConstraint(sum_of_strict.monomials[0].coefficient, '>'))
         return polynomial_of_sum, constraints
 
-    def get_SAT_constraint(self) -> [CoefficientConstraint]:
+    def get_SAT_constraint(self) -> List[CoefficientConstraint]:
         """ a function to find the constraints when the LHS => RHS is satisfiable
 
         :return: list of coefficient constraints when it is satisfiable
@@ -95,7 +97,7 @@ class Handelman:
         polynomial_of_sum, constraints = self.get_poly_sum(self.max_d_for_sat)
         return Solver.find_equality_constraint(polynomial_of_sum, self.RHS.polynomial) + constraints
 
-    def get_UNSAT_constraint(self, need_strict: bool = False) -> [CoefficientConstraint]:
+    def get_UNSAT_constraint(self, need_strict: bool = False) -> List[CoefficientConstraint]:
         """ a function to find the constraints when it is not satisfiable.\n
         two set of constraint can be generated:\n
          1)LHS => -1 >= 0\n

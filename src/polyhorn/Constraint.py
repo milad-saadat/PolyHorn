@@ -1,5 +1,5 @@
-from .Polynomial import Polynomial
 from .Coefficient import Coefficient
+from .Polynomial import Polynomial
 
 
 class PolynomialConstraint:
@@ -10,6 +10,7 @@ class PolynomialConstraint:
             sign (str): The between Polynomial and zero
 
     """
+
     def __init__(self, polynomial: Polynomial, sign: str):
         self.polynomial = polynomial
         self.sign = sign
@@ -55,15 +56,15 @@ class PolynomialConstraint:
         """
         return '(' + self.sign + ' ' + self.polynomial.convert_to_preorder() + ' ' + '0)'
 
+
 class CoefficientConstraint:
     """ A class that represent the constraint with a Coefficient on one side and zero on the other side\n
-
 
             Attributes:
                 coefficient (Coefficient): The Coefficient represented in constraint
                 sign (str): The between Coefficient and zero
+    """
 
-        """
     def __init__(self, coefficient: Coefficient, sign: str):
         self.coefficient = coefficient
         self.sign = sign

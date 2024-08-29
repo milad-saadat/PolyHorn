@@ -1,14 +1,16 @@
 import os
 import subprocess
+from typing import List, Tuple
 
-from .Farkas import *
-from .Handelman import *
-from .Putinar import *
-from .Constant import *
-from .Convertor import *
-from .DNF import *
-from .Coefficient import *
-from enum import Enum
+from .Coefficient import Coefficient, Element, UnknownVariable
+from .Constant import Constant, Theorem
+from .Constraint import CoefficientConstraint
+from .Convertor import Polynomial, convert_general_string_to_poly
+from .DNF import DNF
+from .Farkas import Farkas
+from .Handelman import Handelman
+from .Putinar import Putinar
+from .Solver import Solver
 
 
 class PositiveModel:
@@ -34,16 +36,17 @@ class PositiveModel:
         preconditions ([DNF]) : list of conditions that must be satisfied independent of the horn clauses
     """
 
-    def __init__(self, template_variables_name: [str],
+    def __init__(self, template_variables_name: List[str],
                  theorem_name: str, get_SAT: bool = True, get_UNSAT: bool = False, get_strict: bool = False,
                  degree_of_sat: int = 0, degree_of_nonstrict_unsat: int = 0, degree_of_strict_unsat: int = 0, max_d_of_strict: int = 0,
-                 preconditions:[DNF] = []
+                 preconditions: List[DNF] = []
                  ):
         self.paired_constraint = []
         self.template_variables = []
         self.program_variables = []
         for name in template_variables_name:
-            self.template_variables.append(UnknownVariable(name=name, type_of_var='template_var'))
+            self.template_variables.append(UnknownVariable(
+                name=name, type_of_var='template_var'))
 
         self.theorem_name = theorem_name
         self.get_SAT = get_SAT
@@ -68,7 +71,8 @@ class PositiveModel:
             rhs = DNF([rhs.literals[0]])
         for literal in lhs.literals:
             for item in rhs.literals[0]:
-                self.paired_constraint.append((literal, item, program_variables))
+                self.paired_constraint.append(
+                    (literal, item, program_variables))
 
     def __str__(self) -> str:
         """ convert PositiveModel to string.
@@ -84,7 +88,7 @@ class PositiveModel:
             res += '----------------------\n'
         return res
 
-    def get_polynomial(self, poly_str:str, program_variables) -> Polynomial:
+    def get_polynomial(self, poly_str: str, program_variables) -> Polynomial:
         """ generate a polynomial from a given string based on the template and program variable in the class
 
         :param poly_str: input string that should be converted to a polynomial.
@@ -93,7 +97,7 @@ class PositiveModel:
         return convert_general_string_to_poly(poly_str, self.template_variables + program_variables,
                                               program_variables)
 
-    def get_generated_constraints(self) -> [DNF]:
+    def get_generated_constraints(self) -> List[DNF]:
         """ This function find the constraint for the list of the class's horn clause constraints based on the class configurations.
 
         :return: list of DNF form of constraint for each horn clause.
@@ -137,7 +141,8 @@ class PositiveModel:
                     for constraint in model.get_UNSAT_constraint(need_strict=True):
                         new_dnf.append(constraint)
                 else:
-                    new_dnf.append(model.get_UNSAT_constraint(need_strict=True))
+                    new_dnf.append(
+                        model.get_UNSAT_constraint(need_strict=True))
             all_constraint.append(DNF(new_dnf))
         return all_constraint
 
@@ -149,7 +154,8 @@ class PositiveModel:
             solver_path = Constant.default_path[solver_name]
         if constant_heuristic and (self.get_SAT ^ self.get_UNSAT ^ self.get_strict) and (
                 not (self.get_SAT and self.get_UNSAT and self.get_UNSAT)):
-            all_constraint = PositiveModel.remove_equality_constraints(all_constraint)
+            all_constraint = PositiveModel.remove_equality_constraints(
+                all_constraint)
         if core_iteration_heuristic:
             all_constraint = self.core_iteration(all_constraint, solver_path=solver_path,
                                                  real_values=real_values, saving_path=output_path)
@@ -171,12 +177,14 @@ class PositiveModel:
         f = open(output_path, "w")
         f.write(solver_option + Solver.smt_declare_variable_phase(all_constraint, real_values,
                                                                   self.template_variables) + '\n' +
-                Solver.convert_constraints_to_smt_format(all_constraint, self.preconditions) + output_command
+                Solver.convert_constraints_to_smt_format(
+                    all_constraint, self.preconditions) + output_command
                 )
         f.close()
-    def run_on_solver(self, output_path:str= "checking.txt", solver_name: str = 'z3', core_iteration_heuristic: bool = False,
+
+    def run_on_solver(self, output_path: str = "checking.txt", solver_name: str = 'z3', core_iteration_heuristic: bool = False,
                       constant_heuristic: bool = False, real_values: bool = True
-                      ) -> (bool,dict):
+                      ) -> Tuple[bool, dict]:
         """ This function find the constraints for the clauses and run a solver with given configuration and find values for the template variables.
 
         :param solver_name: name of the solver.
@@ -187,19 +195,19 @@ class PositiveModel:
         :return: a boolean that is true if it  is satisfiable and a dictionary from template variable to their value.
         """
 
-
         solver_path = Constant.default_path[solver_name]
         if solver_path is None:
             print(f"ERROR: Solver {solver_name} is not installed")
             return 'unknown', {}
 
-        self.create_smt_file(output_path, solver_name, solver_path, core_iteration_heuristic, constant_heuristic, real_values)
-        output = subprocess.getoutput(f'{solver_path} {Constant.command[solver_name]} {output_path}')
+        self.create_smt_file(output_path, solver_name, solver_path,
+                             core_iteration_heuristic, constant_heuristic, real_values)
+        output = subprocess.getoutput(
+            f'{solver_path} {Constant.command[solver_name]} {output_path}')
         is_sat = output.split('\n')[0]
 
-
         values = '\n'.join(output.split('\n')[1:])[1:-1].strip()
-        #print(output)
+        # print(output)
         if is_sat == 'unsupported':
             is_sat = output.split('\n')[1]
             values = '\n'.join(output.split('\n')[2:])[2:-1].strip()
@@ -225,7 +233,7 @@ class PositiveModel:
         return 'sat', result_dictionary
 
     @staticmethod
-    def get_equality_constraint(all_constraint: [DNF]):
+    def get_equality_constraint(all_constraint: List[DNF]):
         """ given a list of constraints find a constraint that is in form "template variable" = "constant"
 
         :param all_constraint: list of the constraints
@@ -239,14 +247,15 @@ class PositiveModel:
         return None
 
     @staticmethod
-    def remove_equality_constraints(all_constraint: [DNF]):
+    def remove_equality_constraints(all_constraint: List[DNF]):
         """ remove the equality constraints in each DNF
 
         :param all_constraint: list of the constraints.
         :return: new list of constraints after the heuristic is performed.
         """
         while True:
-            equality_constraint = PositiveModel.get_equality_constraint(all_constraint)
+            equality_constraint = PositiveModel.get_equality_constraint(
+                all_constraint)
             if equality_constraint is None:
                 break
             amount = 0
@@ -295,16 +304,20 @@ class PositiveModel:
             for var in template_variables:
                 generated_constraint.append(
                     DNF(
-                        [[CoefficientConstraint(Coefficient([Element('1', [var])]), '=')]]
+                        [[CoefficientConstraint(
+                            Coefficient([Element('1', [var])]), '=')]]
                     )
                 )
 
                 new_name.append('cons-' + var.name)
 
             input_of_solver = '(set-option :produce-unsat-cores true)\n'
-            input_of_solver += (Solver.smt_declare_variable_phase(all_constraint, real_values, self.template_variables))
-            input_of_solver += (Solver.convert_constraints_to_smt_format(generated_constraint, [], new_name))
-            input_of_solver += (Solver.convert_constraints_to_smt_format(all_constraint, self.preconditions))
+            input_of_solver += (Solver.smt_declare_variable_phase(
+                all_constraint, real_values, self.template_variables))
+            input_of_solver += (Solver.convert_constraints_to_smt_format(
+                generated_constraint, [], new_name))
+            input_of_solver += (Solver.convert_constraints_to_smt_format(
+                all_constraint, self.preconditions))
             input_of_solver += '\n(check-sat)\n(get-unsat-core)\n'
             f = open(saving_path, "w")
             f.write(input_of_solver)
